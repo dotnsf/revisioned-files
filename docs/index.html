@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3c.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta charset="utf8"/>
+<meta http-equiv="pragma" content="no-cache"/>
+<script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="//cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css"/> 
+<script src="//cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
+
+<script src="./couchdb-crud-sdk.js"></script>
+
+<script src="./rf.js"></script>
+<link href="./rf.css" rel="stylesheet"/>
+
+<link rel="shortcut icon" href="./logo.png" type="image/png"/>
+<link rel="icon" href="./logo.png" type="image/png"/>
+<link rel="apple-touch-icon" href="./logo.png"/>
+
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="RF(Revisioned Files)"/>
+
+<title>RF(Revisioned Files)</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" id="nav-bar-0">
+  <a class="navbar-brand" href="#">RF</a>
+  <input id="db_username" class="form-control db_login" type="text" placeholder="username" value=""/>
+  <input id="db_password" class="form-control db_login" type="password" placeholder="password" value=""/>
+  <input id="db_base_url" class="form-control db_login" type="text" placeholder="base url" value=""/>
+  <button id="db_login" class="btn btn-primary db_login" onClick="login();">Login</button>
+</nav>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" id="nav-bar-1" style="display:none;">
+  <a class="navbar-brand" href="#">RF</a>
+</nav>
+
+<div class="container" id="main_div">
+  <div id="dbs_list"></div>
+  <div id="empty_row"></div>
+  <div id="docs_list"></div>
+</div>
+
+<div class="modal bd-example-modal-lg fade" id="viewModal" tabindex="-1" role="dialog" aria-labbelledby="viewModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <input type="hidden" id="view_db" value=""/>
+      <input type="hidden" id="view_doc_id" value=""/>
+      <div class="modal-header">
+        <!--
+        Revisions: <select id="doc_revs" class="form-control" name="doc_revs"></select>
+        -->
+      </div>
+      <div class="modal-body" id="viewmodal-body">
+        <table class="table">
+          <tr><td>revisions</td><td><select id="doc_revs" class="form-control" name="doc_revs"></select></td></tr>
+          <tr><td>filename</td><td><input type="text" id="view_filename" class="form-control" value="" disabled/></td></tr>
+          <tr><td>subject</td><td><input type="text" id="view_subject" class="form-control" value="" disabled/></td></tr>
+          <tr><td>username</td><td><input type="text" id="view_username" class="form-control" value="" disabled/></td></tr>
+          <tr><td>body</td><td><textarea id="view_body" class="form-control" disabled></textarea></td></tr>
+          <tr><td>timestamp</td><td><input type="text" id="view_timestamp" class="form-control" value="" disabled/></td></tr>
+          <tr><td>attachment</td><td id="view_attachment"></td></tr>
+          <tr><td></td><td> <div id="attachment_preview"></div> </td></tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal bd-example-modal-lg fade" id="editModal" tabindex="-1" role="dialog" aria-labbelledby="editModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <input type="hidden" id="edit_db" value=""/>
+      <input type="hidden" id="edit_doc_id" value=""/>
+      <div class="modal-header" id="edit_modal_header">
+        <!--
+        Attachment: <input type="file" class="form-control" id="edit_attachment"/>
+        -->
+      </div>
+      <div class="modal-body" id="editmodal-body">
+        <table class="table">
+          <tr><td>subject</td><td><input type="text" id="edit_subject" class="form-control" value=""/></td></tr>
+          <tr><td>username</td><td><input type="text" id="edit_username" class="form-control" value=""/></td></tr>
+          <tr><td>body</td><td><textarea id="edit_body" class="form-control"></textarea></td></tr>
+          <tr><td>attachment</td><td id="edit_attachment_td"></td></tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" onClick="save_doc()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
